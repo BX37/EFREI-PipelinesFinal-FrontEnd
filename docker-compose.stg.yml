@@ -1,7 +1,7 @@
 services:
   frontend:
-    image: registry.spokayhub.top/EFREI-PipelinesFinal-Frontend:${IMAGE_TAG:-latest}
-    container_name: EFREI-PipelinesFinal-Frontend-stg
+    image: registry.spokayhub.top/efrei-pipelinesfinal-frontend:${IMAGE_TAG:-latest}
+    container_name: efrei-pipelinesfinal-frontend-stg
     ports:
       - "80:80"
     restart: unless-stopped
