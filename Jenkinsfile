@@ -93,7 +93,7 @@ pipeline {
                 sshagent(credentials: ["frontend-${params.DEPLOY_ENV}-ssh-credentials"]) {
                     withCredentials([
                         usernamePassword(credentialsId: 'registry-credentials', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS'),
-                        file(credentialsId: "frontend-${params.DEPLOY_ENV}-env", variable: 'ENV_FILE')
+                        file(credentialsId: "bx37-frontend-${params.DEPLOY_ENV}-env", variable: 'ENV_FILE')
                     ]) {
                         script {
                             env.VM_HOST = params.VM_HOST
