@@ -1,0 +1,165 @@
+Started by user bx37
+
+Obtained Jenkinsfile from git https://github.com/bx37/bx37-pipeline-front.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on ssh-agent
+in /home/jenkins/agent/workspace/bx37/bx37-pipeline-front
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Fetching changes from the remote Git repository
+Checking out Revision 692d3d749971c7ae3f644e5e6c491725b36946a7 (refs/remotes/origin/main)
+Commit message: "feat: added Dockerfile, Jenkinsfile, nginx conf, sonar-project.properties and compose for stg"
+
+> git rev-parse --resolve-git-dir /home/jenkins/agent/workspace/bx37/bx37-pipeline-front/.git # timeout=10
+> git config remote.origin.url https://github.com/bx37/bx37-pipeline-front.git # timeout=10
+> Fetching upstream changes from https://github.com/bx37/bx37-pipeline-front.git
+> git --version # timeout=10
+> git --version # 'git version 2.47.3'
+> git fetch --tags --force --progress -- https://github.com/bx37/bx37-pipeline-front.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+> git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+> git config core.sparsecheckout # timeout=10
+> git checkout -f 692d3d749971c7ae3f644e5e6c491725b36946a7 # timeout=10
+> git rev-list --no-walk 692d3d749971c7ae3f644e5e6c491725b36946a7 # timeout=10
+> [Pipeline] }
+> [Pipeline] // stage
+> [Pipeline] withEnv
+> [Pipeline] {
+> [Pipeline] withEnv
+> [Pipeline] {
+> [Pipeline] stage
+> [Pipeline] { (Declarative: Tool Install)
+> [Pipeline] tool
+> [Pipeline] envVarsForTool
+> [Pipeline] }
+> [Pipeline] // stage
+> [Pipeline] withEnv
+> [Pipeline] {
+> [Pipeline] stage
+> [Pipeline] { (Cleanup)
+> [Pipeline] tool
+> [Pipeline] envVarsForTool
+> [Pipeline] withEnv
+> [Pipeline] {
+> [Pipeline] cleanWs
+> [WS-CLEANUP] Deleting project workspace...
+> [WS-CLEANUP] Deferred wipeout is used...
+> [WS-CLEANUP] done
+> [Pipeline] }
+> [Pipeline] // withEnv
+> [Pipeline] }
+> [Pipeline] // stage
+> [Pipeline] stage
+> [Pipeline] { (Checkout)
+> [Pipeline] tool
+> [Pipeline] envVarsForTool
+> [Pipeline] withEnv
+> [Pipeline] {
+> [Pipeline] git
+> Selected Git installation does not exist. Using Default
+> The recommended git tool is: NONE
+> No credentials specified
+> Cloning the remote Git repository
+> Cloning repository https://github.com/bx37/bx37-pipeline-front.git
+> git init /home/jenkins/agent/workspace/bx37/bx37-pipeline-front # timeout=10
+> Fetching upstream changes from https://github.com/bx37/bx37-pipeline-front.git
+> git --version # timeout=10
+> git --version # 'git version 2.47.3'
+> git fetch --tags --force --progress -- https://github.com/bx37/bx37-pipeline-front.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+> Avoid second fetch
+> Checking out Revision 692d3d749971c7ae3f644e5e6c491725b36946a7 (refs/remotes/origin/main)
+> Commit message: "feat: added Dockerfile, Jenkinsfile, nginx conf, sonar-project.properties and compose for stg"
+> [Pipeline] script
+> [Pipeline] {
+> [Pipeline] echo
+> Commit actuel : 692d3d749971c7ae3f644e5e6c491725b36946a7
+> [Pipeline] echo
+> Build number : 2
+> [Pipeline] echo
+> Image tag: 2-692d3d7
+> [Pipeline] }
+> [Pipeline] // script
+> [Pipeline] }
+> [Pipeline] // withEnv
+> [Pipeline] }
+> [Pipeline] // stage
+> [Pipeline] stage
+> [Pipeline] { (Test)
+> [Pipeline] tool
+> [Pipeline] envVarsForTool
+> git config remote.origin.url https://github.com/bx37/bx37-pipeline-front.git # timeout=10
+> git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+> git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+> git config core.sparsecheckout # timeout=10
+> git checkout -f 692d3d749971c7ae3f644e5e6c491725b36946a7 # timeout=10
+> git branch -a -v --no-abbrev # timeout=10
+> git checkout -b main 692d3d749971c7ae3f644e5e6c491725b36946a7 # timeout=10
+> [Pipeline] withEnv
+> [Pipeline] {
+> [Pipeline] sh
+
+* npm ci
+  ...
+* CI=true npm test -- --watchAll=false --coverage
+  PASS **tests**/smoke.test.ts
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  [Pipeline] }
+  [Pipeline] // withEnv
+  [Pipeline] }
+  [Pipeline] // stage
+  [Pipeline] stage
+  [Pipeline] { (SonarQube Analysis)
+  [Pipeline] tool
+  [Pipeline] envVarsForTool
+  [Pipeline] withEnv
+  [Pipeline] {
+  [Pipeline] script
+  [Pipeline] {
+  [Pipeline] tool
+  [Pipeline] withSonarQubeEnv
+  Injecting SonarQube environment variables using the configuration: sonar-bx37
+  [Pipeline] {
+  [Pipeline] sh
+* sonar-scanner
+  Project key: bx37-pipeline-front
+  Base dir: /home/jenkins/agent/workspace/bx37/bx37-pipeline-front
+  ANALYSIS SUCCESSFUL
+  https://sonar.bx37hub.top/dashboard?id=bx37-pipeline-front
+  [Pipeline] }
+  [Pipeline] }
+  [Pipeline] }
+  [Pipeline] }
+  [Pipeline] }
+  [Pipeline] stage
+  [Pipeline] { (Build)
+  [Pipeline] sh
+* docker build --platform linux/amd64 -t registry.bx37hub.top/bx37-pipeline-front:2-692d3d7 -t registry.bx37hub.top/bx37-pipeline-front:latest .
+  [Pipeline] }
+  [Pipeline] stage
+  [Pipeline] { (Push)
+  [Pipeline] sh
+* docker push registry.bx37hub.top/bx37-pipeline-front:2-692d3d7
+* docker push registry.bx37hub.top/bx37-pipeline-front:latest
+  [Pipeline] }
+  [Pipeline] stage
+  [Pipeline] { (Deploy)
+  [Pipeline] sh
+* ssh ... docker inspect bx37-pipeline-front-stg ...
+  Image actuelle : none
+  Déploiement de l'image : registry.bx37hub.top/bx37-pipeline-front:2-692d3d7
+  Container bx37-pipeline-front-stg Started
+  true
+  [Pipeline] }
+  [Pipeline] stage
+  [Pipeline] { (Declarative: Post Actions)
+  [Pipeline] echo
+  Déploiement [stg] de l'image registry.bx37hub.top/bx37-pipeline-front:2-692d3d7 réussi
+  [Pipeline] }
+  [Pipeline] End of Pipeline
+  Finished: SUCCESS
